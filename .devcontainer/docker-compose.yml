@@ -12,7 +12,7 @@ services:
     hostname: zookeeper
     container_name: zookeeper
     ports:
-      - "${ZOOKEEPER_PORT}:${ZOOKEEPER_PORT}"
+      - "${ZOOKEEPER_PORT}:${ZOOKEEPER_PORT}"           # defined in .env file
     environment:
       ZOOKEEPER_CLIENT_PORT: ${ZOOKEEPER_PORT}          # defined in .env file
       ZOOKEEPER_TICK_TIME: 2000                         # checks every 2 seconds
@@ -24,8 +24,8 @@ services:
     ports:
       # To learn about configuring Kafka for access across networks see
       # https://www.confluent.io/blog/kafka-client-cannot-connect-to-broker-on-aws-on-docker-etc/
-      - "${KAFKA_INTERNAL_PORT}:${KAFKA_INTERNAL_PORT}"
-      - "${KAFKA_EXTERNAL_PORT}:${KAFKA_EXTERNAL_PORT}"
+      - "${KAFKA_INTERNAL_PORT}:${KAFKA_INTERNAL_PORT}" # defined in .venv file
+      - "${KAFKA_EXTERNAL_PORT}:${KAFKA_EXTERNAL_PORT}" # defined in .venv file
     depends_on:
       - zookeeper
     environment:

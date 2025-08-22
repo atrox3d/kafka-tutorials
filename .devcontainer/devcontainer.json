@@ -20,10 +20,9 @@
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	"forwardPorts": [9092, 29092],
 
-  // --- This is the key part ---
   // Run commands after the container is created to set up the environment with uv
-//   "postCreateCommand": "pipx install uv && uv venv && . .venv/bin/activate && uv pip install -e .",
-  "postCreateCommand": "pipx install uv && uv venv --allow-existing && . .venv/bin/activate",
+  // install uv, create .venv if not exist, activate it, sync packages and activate it
+  "postCreateCommand": "pipx install uv && uv venv --allow-existing && uv sync && . .venv/bin/activate",
 
   // Configure VS Code settings and extensions for the container
   "customizations": {
