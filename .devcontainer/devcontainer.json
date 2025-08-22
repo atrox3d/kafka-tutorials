@@ -1,38 +1,24 @@
-// For format details, see https://aka.ms/devcontainer.json. For config options, see the
-// README at: https://github.com/devcontainers/templates/tree/main/src/ubuntu
 {
-	"name": "Kafka",
-	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-	// "image": "mcr.microsoft.com/devcontainers/base:jammy"
+  "name": "Python 3 Project (uv)",
+  // Use a standard Python image that includes pipx
+  "image": "mcr.microsoft.com/devcontainers/python:3.11",
 
-	// "build": {
-	// 	"dockerfile": "Dockerfile"
-	// }
+  // --- This is the key part ---
+  // Run commands after the container is created to set up the environment with uv
+  "postCreateCommand": "pipx install uv && uv venv && . .venv/bin/activate && uv pip install -e .",
 
-	"dockerComposeFile": "docker-compose.yml",
-	"service": "devcontainer",
-	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
-
-	// Features to add to the dev container. More info: https://containers.dev/features.
-	// "features": {},
-
-	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	"forwardPorts": [9092, 29092],
-
-	// Use 'postCreateCommand' to run commands after the container is created.
-	// Installs uv via pipx, then uses it to sync dependencies from requirements.txt
-	"postCreateCommand": "pipx install uv && uv pip sync requirements.txt",
-
-	// Configure tool-specific properties.
-	"customizations": {
-		"vscode": {
-			"extensions": [
-				"ms-python.python",
-				"ms-python.vscode-pylance"
-			]
-		}
-	}
-
-	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
-	// "remoteUser": "root"
+  // Configure VS Code settings and extensions for the container
+  "customizations": {
+    "vscode": {
+      "settings": {
+        // Tell VS Code to use the Python interpreter from the venv we just created
+        "python.defaultInterpreterPath": "${containerWorkspaceFolder}/.venv/bin/python",
+        "python.terminal.activateEnvironment": true
+      },
+      "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance"
+      ]
+    }
+  }
 }
