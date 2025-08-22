@@ -6,7 +6,7 @@
   // --- This is the key part ---
   // Run commands after the container is created to set up the environment with uv
 //   "postCreateCommand": "pipx install uv && uv venv && . .venv/bin/activate && uv pip install -e .",
-  "postCreateCommand": "pipx install uv && uv venv && . .venv/bin/activate",
+  "postCreateCommand": "pipx install uv && uv venv --allow-existing && . .venv/bin/activate",
 
   // Configure VS Code settings and extensions for the container
   "customizations": {
