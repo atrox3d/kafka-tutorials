@@ -10,8 +10,10 @@ from kafka_producer import produce_message
 from produce_schema import ProduceMessage
 
 
+KAFKA_HOST = 'localhost'            # no brokers available
+KAFKA_HOST = 'kafka'                # node not ready
 KAFKA_INTERNAL_PORT = os.environ.get("KAFKA_INTERNAL_PORT", "9092")
-KAFKA_BROKER_URL = f'kafka:{KAFKA_INTERNAL_PORT}'
+KAFKA_BROKER_URL = f'{KAFKA_HOST}:{KAFKA_INTERNAL_PORT}'
 KAFKA_TOPIC = 'fastapi-topic'
 KAFKA_ADMIN_CLIENT = 'fastapi-admin-client'
 
@@ -19,23 +21,28 @@ KAFKA_ADMIN_CLIENT = 'fastapi-admin-client'
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     
-    admin_client = KafkaAdminClient(
-        bootstrap_servers=[KAFKA_BROKER_URL],
-        client_id=KAFKA_ADMIN_CLIENT
-    )
-    
-    if not KAFKA_TOPIC in admin_client.list_topics():
-        admin_client.create_topics(
-            new_topics=[
-                NewTopic(
-                    name=KAFKA_TOPIC, 
-                    num_partitions=1, 
-                    replication_factor=1
-                )
-            ],
-            validate_only=False
+    try:
+        admin_client = KafkaAdminClient(
+            bootstrap_servers=[KAFKA_BROKER_URL],
+            client_id=KAFKA_ADMIN_CLIENT
         )
-        # admin_client.delete_topics(topics=[KAFKA_TOPIC])
+        
+        if not KAFKA_TOPIC in admin_client.list_topics():
+            admin_client.create_topics(
+                new_topics=[
+                    NewTopic(
+                        name=KAFKA_TOPIC, 
+                        num_partitions=1, 
+                        replication_factor=1
+                    )
+                ],
+                validate_only=False
+            )
+            # admin_client.delete_topics(topics=[KAFKA_TOPIC])
+    except Exception as e:
+        print(e)
+        print(KAFKA_BROKER_URL)
+        raise e 
     
     yield   # separation point between start and stop application in lifespan
     
