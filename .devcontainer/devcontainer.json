@@ -10,7 +10,7 @@
 	// 	"dockerfile": "Dockerfile"
 	// }
 
-	"dockerComposeFile": "docker-compose.yml",
+	"dockerComposeFile": "docker-compose.yaml",
 	"service": "devcontainer",
 	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
 

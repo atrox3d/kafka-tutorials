@@ -8,7 +8,7 @@ import os
 
 
 KAFKA_INTERNAL_PORT = os.environ.get("KAFKA_INTERNAL_PORT", "9092")
-KAFKA_BROKER_URL = f'localhost:{KAFKA_INTERNAL_PORT}'
+KAFKA_BROKER_URL = f'kafka:{KAFKA_INTERNAL_PORT}'
 KAFKA_TOPIC = 'fastapi-topic'
 PRODUCER_CLIENT_ID = 'fastapi-producer'
 
