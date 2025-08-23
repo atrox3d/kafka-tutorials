@@ -22,7 +22,6 @@
 
   // Run commands after the container is created to set up the environment with uv
   // install uv, create .venv if not exist, activate it, sync packages and activate it
-  "postCreateCommand": "pipx install uv && uv venv --allow-existing && uv sync && . .venv/bin/activate",
 
   // Configure VS Code settings and extensions for the container
   "customizations": {
