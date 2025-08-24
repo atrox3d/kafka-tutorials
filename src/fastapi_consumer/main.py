@@ -34,6 +34,7 @@ def json_deserializer(value):
         logger.info(f'decoded message: {decoded}')
         deserialized = json.loads(decoded)
         logger.info(f'deserialized message: {deserialized}')
+        return deserialized
     except Exception as e:
         logger.error(f'unable to decode {e}, {value = }')
         return None
@@ -63,8 +64,11 @@ async def poll_consumer(consumer: KafkaConsumer):
                     for message in record:
                         logger.info(f'message: {message}')
                         logger.info(f'message.value: {message.value}')
-                        deserialized_value = json.loads(message.value)
+                        # deserialized_value = json.loads(message.value)        # this is wrong
+                        deserialized_value = message.value
+                        logger.info(f'deserialized_value: {deserialized_value}')
                         m = deserialized_value.get('message')
+                        logger.info(f'{m = }')
                         logger.info(f'received message {m = } of {message.topic = }')
             await asyncio.sleep(5)
     except Exception as e:
@@ -74,7 +78,7 @@ async def poll_consumer(consumer: KafkaConsumer):
 
 
 stop_polling_event = asyncio.Event()
-app = FastAPI(port=CONSUMER_FASTAPI_PORT)
+app = FastAPI()
 tasklist = []
 
 
@@ -101,3 +105,18 @@ async def stop_polling():
     
     logger.info('poll stopped')
     return {'status': 'poll stopped'}
+
+
+
+
+if __name__ == "__main__":
+    import uvicorn
+    # The reload=True flag makes the server restart after code changes,
+    # which is great for development.
+    # Note: When using reload=True, uvicorn.run expects the app as a string.
+    uvicorn.run(
+        "main:app", 
+        host="0.0.0.0", 
+        port=int(CONSUMER_FASTAPI_PORT), 
+        reload=True
+    )

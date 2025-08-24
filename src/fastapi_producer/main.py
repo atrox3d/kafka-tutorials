@@ -49,7 +49,7 @@ async def lifespan(app: FastAPI):
     yield   # separation point between start and stop application in lifespan
     
 
-app = FastAPI(lifespan=lifespan, port=PRODUCER_FASTAPI_PORT)
+app = FastAPI(lifespan=lifespan)
 
 
 @app.post('/produce/message')
@@ -57,3 +57,16 @@ async def produce_message(messageRequest: ProduceMessage, background_tasks: Back
     logger.info(f'Adding background task to produce message: "{messageRequest.message}"')
     background_tasks.add_task(produce_kafka_message, messageRequest)
     return {'message': 'Message received, thank you for sending a message'}
+
+
+if __name__ == "__main__":
+    import uvicorn
+    # The reload=True flag makes the server restart after code changes,
+    # which is great for development.
+    # Note: When using reload=True, uvicorn.run expects the app as a string.
+    uvicorn.run(
+        "main:app", 
+        host="0.0.0.0", 
+        port=int(PRODUCER_FASTAPI_PORT), 
+        reload=True
+    )
