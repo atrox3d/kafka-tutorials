@@ -1,5 +1,3 @@
-from http import client
-from math import prod
 from kafka import KafkaProducer
 from fastapi import HTTPException
 from produce_schema import ProduceMessage
