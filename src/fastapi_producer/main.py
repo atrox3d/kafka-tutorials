@@ -15,6 +15,8 @@ KAFKA_INTERNAL_PORT = os.environ.get("KAFKA_INTERNAL_PORT", "9092")
 KAFKA_BROKER_URL = f'kafka:{KAFKA_INTERNAL_PORT}'
 KAFKA_TOPIC = 'fastapi-topic'
 KAFKA_ADMIN_CLIENT = 'fastapi-admin-client'
+PRODUCER_FASTAPI_PORT = os.environ.get("PRODUCER_FASTAPI_PORT", "8001")
+
 
 logger = logging.getLogger('uvicorn.error')
 
@@ -47,7 +49,7 @@ async def lifespan(app: FastAPI):
     yield   # separation point between start and stop application in lifespan
     
 
-app = FastAPI(lifespan=lifespan)
+app = FastAPI(lifespan=lifespan, port=PRODUCER_FASTAPI_PORT)
 
 
 @app.post('/produce/message')
