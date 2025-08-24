@@ -22,14 +22,10 @@
 
   // Run commands after the container is created to set up the environment with uv
   // install uv, create .venv if not exist, activate it, sync packages and activate it
-  "postCreateCommand": "pipx install uv && uv venv --allow-existing && uv sync && . .venv/bin/activate",
+  // "postCreateCommand": "pipx install uv && uv venv --allow-existing && uv sync && . .venv/bin/activate",
+  "postCreateCommand": ".devcontainer/on-create.sh",
 
-  
-  // "mounts": [
-  //   // This line mounts your new host folder into the container's config location
-  //   "source=${localWorkspaceFolder}/.devcontainer/.gcloud-creds,target=/home/vscode/.config/gcloud,type=bind,consistency=cached"
-  // ],
-  // Configure VS Code settings and extensions for the container
+    // Configure VS Code settings and extensions for the container
   "customizations": {
     "vscode": {
       "settings": {
