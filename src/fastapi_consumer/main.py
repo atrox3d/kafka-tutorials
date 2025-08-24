@@ -2,32 +2,34 @@ import logging
 import os
 import asyncio
 import json
-import sys
-from pathlib import Path
-from tracemalloc import stop
-from turtle import st
-sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from kafka import KafkaConsumer
-from fastapi import FastAPI, BackgroundTasks
+from fastapi import FastAPI
 
 
+
+
+
+
+# variables defined in .devcontainer/.env
 KAFKA_INTERNAL_PORT = os.environ.get("KAFKA_INTERNAL_PORT", "9092")
 KAFKA_BROKER_URL = f'kafka:{KAFKA_INTERNAL_PORT}'
-KAFKA_TOPIC = 'fastapi-topic'
+KAFKA_TOPIC = os.environ.get("KAFKA_TOPIC", "fastapi-topic")
 KAFKA_CONSUMER_ID = 'fastapi-consumer'
 CONSUMER_FASTAPI_PORT = os.environ.get("CONSUMER_FASTAPI_PORT", "8002")
 
 
 
-logger = logging.getLogger('uvicorn.error')
+logger = logging.getLogger('uvicorn.error')         # get uviconrn logger
 
 
 def json_deserializer(value):
+    """deserializer for kafka consumer"""
+    
     logger.info(f'deserializing message: {value}')
     if value is None: 
         logger.info('value is None, returning')
-        return
+        return None
     
     try:
         decoded = value.decode('utf-8')
@@ -41,6 +43,8 @@ def json_deserializer(value):
 
 
 def create_kafka_consumer() -> KafkaConsumer:
+    """create a kafka consumer"""
+    
     consumer = KafkaConsumer(
         KAFKA_TOPIC,
         bootstrap_servers=[KAFKA_BROKER_URL],
@@ -53,43 +57,50 @@ def create_kafka_consumer() -> KafkaConsumer:
 
 
 async def poll_consumer(consumer: KafkaConsumer):
+    """poll the kafka consumer if event is not set"""
+    
     try:
-        while not stop_polling_event.is_set():
+        while not stop_polling_event.is_set():                                  # if false
             logger.info('trying to poll again')
-            records = consumer.poll(timeout_ms=5000, max_records=250)
+            records = consumer.poll(                                            # records is a dict
+                timeout_ms=5000,                                                # wait messages for 5 seconds
+                max_records=250                                                 # max 250 messages for batch
+            )
             logger.info(f'records: {records}')
-            if records:
-                for record in records.values():
+            if records:                                                         # seems useless to me
+                for record in records.values():                                 # get the values only
                     logger.info(f'record: {record}')
-                    for message in record:
+                    for message in record:                                      # every value is a list of kafka events
                         logger.info(f'message: {message}')
                         logger.info(f'message.value: {message.value}')
                         # deserialized_value = json.loads(message.value)        # this is wrong
-                        deserialized_value = message.value
+                        deserialized_value = message.value                      # get the actual value
                         logger.info(f'deserialized_value: {deserialized_value}')
-                        m = deserialized_value.get('message')
+                        m = deserialized_value.get('message')                  # value is a dict
                         logger.info(f'{m = }')
                         logger.info(f'received message {m = } of {message.topic = }')
-            await asyncio.sleep(5)
+            await asyncio.sleep(5)                                             # yields control to the main loop for 5 seconds
     except Exception as e:
         logger.error(f'errors available {e}')
     finally:
         consumer.close()
 
 
-stop_polling_event = asyncio.Event()
+stop_polling_event = asyncio.Event()                                            # set to false == polling ok
 app = FastAPI()
 tasklist = []
 
 
 @app.get('/trigger')
 async def trigger_polling():
-    if not tasklist:
+    """trigger the polling"""
+    
+    if not tasklist:                                                            # if task is not empty we are already polling
         logger.info('tasklist is empty starting poll')
-        stop_polling_event.clear()
+        stop_polling_event.clear()                                              # set to false: enable polling
         consumer = create_kafka_consumer()
-        task = asyncio.create_task(poll_consumer(consumer))
-        tasklist.append(task)
+        task = asyncio.create_task(poll_consumer(consumer))                     # schedule task
+        tasklist.append(task)                                                   # add task to list 
         
         logger.info('poll started')
         return {'status': 'poll started'}
@@ -98,10 +109,12 @@ async def trigger_polling():
 
 @app.get('/stop')
 async def stop_polling():
+    """stop the polling"""
+    
     logger.info('stopping poll')
-    stop_polling_event.set()
+    stop_polling_event.set()                                    # set to true 
     if tasklist:
-        tasklist.pop()
+        tasklist.pop()                                          # remove task
     
     logger.info('poll stopped')
     return {'status': 'poll stopped'}
