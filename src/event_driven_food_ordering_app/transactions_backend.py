@@ -10,10 +10,15 @@ ORDER_KAFKA_TOPIC = "order_details"
 ORDER_CONFIRMED_KAFKA_TOPIC = "order_confirmed"
 KAFKA_INTERNAL_PORT = os.environ.get("KAFKA_INTERNAL_PORT", "9092")
 KAFKA_BROKER_URL = f'kafka:{KAFKA_INTERNAL_PORT}'
-PRODUCER_CLIENT_ID = 'fastapi-producer'
+# PRODUCER_CLIENT_ID = 'fastapi-producer'
 
 
-consumer = KafkaConsumer(ORDER_KAFKA_TOPIC, bootstrap_servers=[KAFKA_BROKER_URL])
+consumer = KafkaConsumer(
+    ORDER_KAFKA_TOPIC, 
+    bootstrap_servers=[KAFKA_BROKER_URL],
+    auto_offset_reset='earliest',
+    enable_auto_commit=False,
+)
 producer = KafkaProducer(bootstrap_servers=[KAFKA_BROKER_URL])
 
 print('Listening to orders...')
