@@ -16,6 +16,7 @@ KAFKA_BROKER_URL = f'kafka:{KAFKA_INTERNAL_PORT}'
 consumer = KafkaConsumer(
     ORDER_KAFKA_TOPIC, 
     bootstrap_servers=[KAFKA_BROKER_URL],
+    # group_id="transactions-group",
     auto_offset_reset='earliest',
     enable_auto_commit=False,
 )
@@ -37,3 +38,4 @@ while True:
         }
         print('Successful transaction, sending confirmation...')
         producer.send(ORDER_CONFIRMED_KAFKA_TOPIC, json.dumps(data).encode("utf-8"))
+        # consumer.commit()

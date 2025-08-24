@@ -16,6 +16,7 @@ KAFKA_BROKER_URL = f'kafka:{KAFKA_INTERNAL_PORT}'
 consumer = KafkaConsumer(
     ORDER_CONFIRMED_KAFKA_TOPIC, 
     bootstrap_servers=[KAFKA_BROKER_URL],
+    # group_id="analytics-group",
     auto_offset_reset='earliest',
     enable_auto_commit=False,
 )
@@ -33,4 +34,4 @@ while True:
         total_revenue += total_cost
         print(f'Total orders: {total_orders}')
         print(f'Total revenue: {total_revenue}')
-
+        # consumer.commit()
