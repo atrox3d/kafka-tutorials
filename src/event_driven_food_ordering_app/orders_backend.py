@@ -29,7 +29,7 @@ time.sleep(ORDER_START_SECONDS)
 for i in range(ORDER_LIMIT):
     data = {
         "order_id": i,
-        "user_id": f"user_{i}",
+        "customer_id": f"user_{i}",
         "total_cost": i *  5,
         "items": random.choice('hamburger salad hotdog sandwich'.split())
     }

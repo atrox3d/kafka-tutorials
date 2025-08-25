@@ -17,13 +17,13 @@ while True:
         consumed_message = message.value
         print(consumed_message)
         
-        user_id = consumed_message['user_id']
+        customer_id = consumed_message['customer_id']
         total_cost = consumed_message['total_cost']
         data = {
             'order_id': consumed_message['order_id'],
             'items': consumed_message['items'],
-            'customer_id': user_id,
-            'customer_email': f'{user_id}@gmail.com',
+            'customer_id': customer_id,
+            'customer_email': f'{customer_id}@gmail.com',
             'total_cost': total_cost
         }
         print('Successful transaction, sending confirmation...')
