@@ -3,23 +3,23 @@ import pandas as pd
 
 from . import data
 
-def load_orders(data_path:str|Path):
+def load_orders(data_path:str|Path) -> pd.DataFrame:
     df = data.load_df(data_path)
     if df is None:
         return pd.DataFrame()
     return pd.read_csv(data_path)
 
 
-def save_orders(df:pd.DataFrame, data_path:str|Path):
+def save_orders(df:pd.DataFrame, data_path:str|Path) -> None:
     data.save_df(df, data_path)
 
 
-def update_orders(data_path:str|Path, order:dict):
+def update_orders(data_path:str|Path, order:dict) -> None:
     update = pd.DataFrame([order])
     data.update_df(data_path, update)
 
 
-def get_next_order_id(data_path:str|Path):
+def get_next_order_id(data_path:str|Path) -> int:
     df = load_orders(data_path)
     if df is None or (len(df) == 0):
         return 0
