@@ -1,3 +1,4 @@
+
 from kafka_helpers import create_consumer
 from config import (
     ORDER_CONFIRMED_KAFKA_TOPIC,
@@ -12,6 +13,7 @@ total_revenue = 0
 while True:
     for message in consumer:
         print('Updating analytics...')
+        consumed_message = message.value
         total_cost = float(consumed_message['total_cost'])
         total_orders += 1
         total_revenue += total_cost
