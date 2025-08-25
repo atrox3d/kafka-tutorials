@@ -1,30 +1,19 @@
-import json
-from math import prod
 import time
 
-from kafka import KafkaConsumer
-
+from kafka_helpers import create_consumer
 from config import (
     ORDER_CONFIRMED_KAFKA_TOPIC,
-    KAFKA_BROKER_URL
 )
 
-
-consumer = KafkaConsumer(
-    ORDER_CONFIRMED_KAFKA_TOPIC, 
-    bootstrap_servers=[KAFKA_BROKER_URL],
-    # group_id="email-group",
-    auto_offset_reset='earliest',
-    enable_auto_commit=False,
-)
-# producer = KafkaProducer(bootstrap_servers=[KAFKA_BROKER_URL])
+consumer = create_consumer(ORDER_CONFIRMED_KAFKA_TOPIC)
 
 email_sent = set()
 print('Listening to confirmed orders...')
 while True:
     for message in consumer:
         print('sending mail...')
-        consumed_message = json.loads(message.value.decode())
+        # consumed_message = json.loads(message.value.decode())
+        consumed_message = message.value
         customer_email = consumed_message['customer_email']
         print(f'Sending email to {customer_email}')
         email_sent.add(customer_email)
