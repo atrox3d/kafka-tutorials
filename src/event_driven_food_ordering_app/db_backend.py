@@ -26,4 +26,4 @@ while True:
             # In a real app: db_connection.execute("UPDATE ...", confirmation_data)
         
         consumer.commit()
-    time.sleep(1)
+        time.sleep(1)
