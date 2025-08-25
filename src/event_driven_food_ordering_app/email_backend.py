@@ -1,11 +1,13 @@
+from curses.ascii import EM
 import time
 
 from kafka_helpers import create_consumer
 from config import (
     ORDER_CONFIRMED_KAFKA_TOPIC,
+    EMAIL_CLIENT_ID
 )
 
-consumer = create_consumer(ORDER_CONFIRMED_KAFKA_TOPIC)
+consumer = create_consumer(ORDER_CONFIRMED_KAFKA_TOPIC, group_id=EMAIL_CLIENT_ID, enable_auto_commit=True)
 
 email_sent = set()
 print('Listening to confirmed orders...')

@@ -2,9 +2,10 @@ from kafka_helpers import create_producer, create_consumer
 from config import (
     ORDER_KAFKA_TOPIC,
     ORDER_CONFIRMED_KAFKA_TOPIC,
+    TRANSACTION_CLIENT_ID
 )
 
-consumer = create_consumer(ORDER_KAFKA_TOPIC)
+consumer = create_consumer(ORDER_KAFKA_TOPIC, group_id=TRANSACTION_CLIENT_ID, enable_auto_commit=True)
 producer = create_producer()
 
 print('Listening to orders...')

@@ -2,10 +2,11 @@
 from kafka_helpers import create_consumer
 from config import (
     ORDER_CONFIRMED_KAFKA_TOPIC,
+    ANALYTICS_CLIENT_ID
 )
 
 
-consumer = create_consumer(ORDER_CONFIRMED_KAFKA_TOPIC)
+consumer = create_consumer(ORDER_CONFIRMED_KAFKA_TOPIC, group_id=ANALYTICS_CLIENT_ID, enable_auto_commit=True)
 
 print('Listening to confirmed orders...')
 total_orders = 0

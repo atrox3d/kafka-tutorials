@@ -1,9 +1,10 @@
 import json
-from kafka import KafkaProducer, KafkaConsumer
+from kafka import KafkaProducer, KafkaConsumer, KafkaAdminClient
 from typing import Callable, Any
 
 from config import (
-    KAFKA_BROKER_URL
+    KAFKA_BROKER_URL,
+    ADMIN_CLIENT_ID,
 )
 
 
@@ -56,3 +57,28 @@ def create_consumer(
         value_deserializer=value_deserializer,
     )
     return consumer
+
+
+def create_admin_client(
+    bootstrap_servers: str | list[str] = KAFKA_BROKER_URL,
+    client_id: str = ADMIN_CLIENT_ID,
+    request_timeout_ms: int = 5000,
+) -> KafkaAdminClient:
+    """Creates a KafkaAdminClient with sensible defaults."""
+    admin_client = KafkaAdminClient(
+        bootstrap_servers=bootstrap_servers,
+        client_id=client_id,
+        request_timeout_ms=request_timeout_ms  # Add a timeout for robustness
+    )
+    return admin_client
+
+
+def delete_kafka_topics(
+    *topics: str,
+    admin_client: KafkaAdminClient = create_admin_client(), 
+):
+    """
+    Connects to Kafka and deletes a list of specified topics.
+    """
+    # logging.info(f"Connecting to Kafka at {KAFKA_BROKER_URL}...")
+    admin_client.delete_topics(topics=topics, timeout_ms=5000)

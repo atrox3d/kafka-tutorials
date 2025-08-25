@@ -1,16 +1,26 @@
 import time
 import random
 
-from kafka_helpers import create_producer
+from kafka_helpers import create_producer, delete_kafka_topics, create_admin_client
 from config import (
-    ORDER_KAFKA_TOPIC, 
-    ORDER_LIMIT, 
-    ORDER_START_SECONDS, 
-    ORDER_WAIT_SECONDS, 
+    ORDER_KAFKA_TOPIC,
+    ALL_KAFKA_TOPICS,
+    DEFAULT_ORDER_LIMIT,
+    DEFAULT_ORDER_START_SECONDS,
+    DEFAULT_ORDER_WAIT_SECONDS,
 )
 
+ORDER_LIMIT = 5
+ORDER_START_SECONDS = DEFAULT_ORDER_START_SECONDS
+ORDER_WAIT_SECONDS = DEFAULT_ORDER_WAIT_SECONDS
 
+
+admin_client = create_admin_client()
 producer = create_producer()
+
+print('Deleting existing topics...')
+delete_kafka_topics(*ALL_KAFKA_TOPICS, admin_client=admin_client)
+print('Topics deleted')
 
 print(f'Generating orders after {ORDER_START_SECONDS} seconds')
 print(f'Will generate one unique order every {ORDER_WAIT_SECONDS} seconds')
