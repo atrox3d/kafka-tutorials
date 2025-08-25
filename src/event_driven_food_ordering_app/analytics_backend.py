@@ -1,16 +1,11 @@
 import json
-from math import prod
-import time
-import os
-import random
 
-from kafka import KafkaConsumer, KafkaProducer
+from kafka import KafkaConsumer
 
-# ORDER_KAFKA_TOPIC = "order_details"
-ORDER_CONFIRMED_KAFKA_TOPIC = "order_confirmed"
-KAFKA_INTERNAL_PORT = os.environ.get("KAFKA_INTERNAL_PORT", "9092")
-KAFKA_BROKER_URL = f'kafka:{KAFKA_INTERNAL_PORT}'
-# PRODUCER_CLIENT_ID = 'fastapi-producer'
+from config import (
+    ORDER_CONFIRMED_KAFKA_TOPIC,
+    KAFKA_BROKER_URL
+)
 
 
 consumer = KafkaConsumer(
