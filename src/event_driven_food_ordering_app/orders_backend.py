@@ -15,12 +15,12 @@ ORDER_START_SECONDS = DEFAULT_ORDER_START_SECONDS
 ORDER_WAIT_SECONDS = DEFAULT_ORDER_WAIT_SECONDS
 
 
-admin_client = create_admin_client()
+# admin_client = create_admin_client()
 producer = create_producer()
 
-print('Deleting existing topics...')
-delete_kafka_topics(*ALL_KAFKA_TOPICS, admin_client=admin_client)
-print('Topics deleted')
+# print('Deleting existing topics...')
+# delete_kafka_topics(*ALL_KAFKA_TOPICS, admin_client=admin_client)
+# print('Topics deleted')
 
 print(f'Generating orders after {ORDER_START_SECONDS} seconds')
 print(f'Will generate one unique order every {ORDER_WAIT_SECONDS} seconds')

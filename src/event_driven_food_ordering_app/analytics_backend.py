@@ -1,4 +1,5 @@
 
+import time
 from kafka_helpers import create_consumer
 from config import (
     ORDER_CONFIRMED_KAFKA_TOPIC,
@@ -6,7 +7,7 @@ from config import (
 )
 
 
-consumer = create_consumer(ORDER_CONFIRMED_KAFKA_TOPIC, group_id=ANALYTICS_CLIENT_ID, enable_auto_commit=True)
+consumer = create_consumer(ORDER_CONFIRMED_KAFKA_TOPIC, group_id=ANALYTICS_CLIENT_ID)
 
 print('Listening to confirmed orders...')
 total_orders = 0
@@ -20,4 +21,5 @@ while True:
         total_revenue += total_cost
         print(f'Total orders: {total_orders}')
         print(f'Total revenue: {total_revenue}')
-        # consumer.commit()
+        consumer.commit()
+    time.sleep(1)

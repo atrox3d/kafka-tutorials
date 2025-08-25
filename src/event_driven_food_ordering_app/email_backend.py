@@ -1,4 +1,3 @@
-from curses.ascii import EM
 import time
 
 from kafka_helpers import create_consumer
@@ -7,7 +6,7 @@ from config import (
     EMAIL_CLIENT_ID
 )
 
-consumer = create_consumer(ORDER_CONFIRMED_KAFKA_TOPIC, group_id=EMAIL_CLIENT_ID, enable_auto_commit=True)
+consumer = create_consumer(ORDER_CONFIRMED_KAFKA_TOPIC, group_id=EMAIL_CLIENT_ID)
 
 email_sent = set()
 print('Listening to confirmed orders...')
@@ -21,4 +20,5 @@ while True:
         email_sent.add(customer_email)
         print(f'Sent {len(email_sent)} unique emails')
         time.sleep(1)
-        # consumer.commit()
+        consumer.commit()
+    time.sleep(1)
