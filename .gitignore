@@ -15,3 +15,5 @@ wheels/
 !.devcontainer
 !.vscode
 !.env
+
+data/

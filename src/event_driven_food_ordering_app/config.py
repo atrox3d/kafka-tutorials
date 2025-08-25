@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 
 KAFKA_INTERNAL_PORT = os.environ.get("KAFKA_INTERNAL_PORT", "9092")
 KAFKA_BROKER_URL = f'kafka:{KAFKA_INTERNAL_PORT}'
@@ -17,3 +18,10 @@ TRANSACTION_CLIENT_ID = 'transactions-backend'
 EMAIL_CLIENT_ID = 'email-backend'
 ANALYTICS_CLIENT_ID = 'analytics-backend'
 DB_CONSUMER_GROUP_ID = "db-group"
+
+DATA_DIR = Path(__file__).parent / 'data'
+ORDERS_DATA_PATH = DATA_DIR / 'orders.csv'
+TRANSACTIONS_DATA_PATH = DATA_DIR / 'transactions.csv'
+EMAIL_DATA_PATH = DATA_DIR / 'email.csv'
+ANALYTICS_DATA_PATH = DATA_DIR / 'analytics.csv'
+
