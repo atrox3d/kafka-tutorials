@@ -16,3 +16,4 @@ PRODUCER_CLIENT_ID = 'orders-backend'
 TRANSACTION_CLIENT_ID = 'transactions-backend'
 EMAIL_CLIENT_ID = 'email-backend'
 ANALYTICS_CLIENT_ID = 'analytics-backend'
+DB_CONSUMER_GROUP_ID = "db-group"

@@ -29,5 +29,3 @@ while True:
         producer.send(ORDER_CONFIRMED_KAFKA_TOPIC, data)
         print('Confirmation sent.')
         consumer.commit()
-    time.sleep(1)
-

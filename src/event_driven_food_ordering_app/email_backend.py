@@ -21,4 +21,3 @@ while True:
         print(f'Sent {len(email_sent)} unique emails')
         time.sleep(1)
         consumer.commit()
-    time.sleep(1)

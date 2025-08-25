@@ -22,4 +22,3 @@ while True:
         print(f'Total orders: {total_orders}')
         print(f'Total revenue: {total_revenue}')
         consumer.commit()
-    time.sleep(1)
